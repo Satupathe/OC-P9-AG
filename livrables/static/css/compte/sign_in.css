@@ -1,0 +1,85 @@
+body{
+    background-color: #e6e6ff;
+    height: 100%;
+}
+h1{
+    margin: 2% 0 2% 10%;
+}
+h3{
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.writing_zone{
+    display: flex;
+    flex-direction: column;
+    width: 35em;
+}
+
+.action{
+    display: flex;
+    justify-content: space-around;
+}
+
+.content{
+    border: 2px solid black;
+    border-radius: 5px;
+    margin: 1%;
+    background-color: indianred
+}
+
+.title{
+    text-align: center;
+    font-size: 2.5em;
+    line-height: 0px;
+    background-color: green;
+}
+
+.sign_in{
+    display: flex;
+    flex-direction: column;
+    background-color: gold;
+    width: 50%;
+}
+
+.log_in{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.table{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: red;
+}
+.label{
+    background-color: blue;
+    margin: auto;
+    text-align: center;
+}
+.infos{
+    background-color: purple;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input{
+    margin: 6px;
+    height: 1,8em;
+    width: 100%;
+}
+
+.links{
+    display:flex;
+    flex-direction: column;
+}
+
+button{
+    margin: 12px;
+    background-color: saddlebrown;
+    justify-content: center;
+    align-items: center;
+}

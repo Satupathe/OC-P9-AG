@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LITReview</title>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/flux/flux.css' %}">
+</head>
+<body>
+    <div>
+        <h3>Flux des critiques</h3>
+        <div>
+            <div class='content'>
+                <div class='site_zone'>
+                    <div class='site_name'>
+                        <p>LITReview</p>
+                    </div>
+                    <div class='nav'>
+                        {% include 'LITReview/navbar.html' %}
+                    </div>
+                </div>
+            </div>
+            <div class='content'>
+                <div class='action'>
+                    <div class='ask'>
+                        <button><a href="{% url 'ticket' %}">Demander une critique</a></button>
+                    </div>
+                    <div class='create'>
+                        <button><a href="{% url 'create_review' %}">Créer une critique</a></button>
+                    </div>
+                </div>
+                <div class= 'listing'>
+                    <h3 class='flux'>Nouvelles demandes et critiques disponibles</h3>
+                    {% if tickets|length_is:"0" %}
+                    <div class="text-center">
+                    Il n'existe pour l'instant aucun ticket
+                    </div>
+                    {% else %}
+                        {% for ticket in tickets %}
+                            <div class="ticket">
+                                <h3>{{ticket.title}}</h3>
+                                <p>Par {{ticket.user}}</p>
+                                <p>Le {{ticket.time_created}}</p>
+                                <img class='picture' src="{% get_media_prefix %}{{ ticket.picture }}" alt="{{ ticket.picture }}">
+                                <p>{{ticket.description}}</p>
+                                <button><a href="{% url 'answer_ticket' ticket_number=ticket.id %}">Répondre à la critique</a></button>
+                            </div>
+                        {% endfor %}
+                        
+
+                    {% endif %}
+
+                    {% if paginate %}
+                    <div class="clearfix"></div>
+                    <nav aria-label="">
+                        
+                        {% if tickets.has_previous %}
+                            <a href="?page={{ tickets.previous_page_number }}">Précédent</a>
+                        {% endif %}
+                        {% if tickets.has_next %}
+                            <a href="?page={{ tickets.next_page_number }}">Suivant</a>
+                        {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!-- JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</html>
+       

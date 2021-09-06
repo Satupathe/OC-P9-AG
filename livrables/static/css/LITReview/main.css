@@ -1,0 +1,51 @@
+body{
+    background-color: #e6e6ff;
+}
+h1{
+    margin: 2% 0 2% 10%;
+}
+h3{
+    font-size: 1.5em;
+}
+input{
+    margin: 4px;
+}
+button{
+    margin: 6px;
+}
+
+.action{
+    display: flex;
+    justify-content: space-around;
+    padding: 10%;
+}
+
+.content{
+    background-color:gainsboro;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin: 1%;
+    padding: auto;
+}
+
+.title{
+    display: flex;
+    text-align: center;
+    font-size: 2.5em;
+    line-height: 0px;
+}
+
+
+.sign_in{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.log_in{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
