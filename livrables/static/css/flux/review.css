@@ -1,6 +1,15 @@
 body{
     background-color: #e6e6ff;
 }
+.navbar{
+    display: flex;
+    justify-content: space-around;
+    background-color: red;
+    list-style-type: none;
+}
+.logout{
+    color: red;
+}
 .content{
     display: flex;
     flex-direction: column;

@@ -13,7 +13,15 @@ input{
 button{
     margin: 6px;
 }
-
+ul{
+    background-color: white;
+    width: 100%;
+    margin: auto;
+}
+li{
+    width: 25%;
+    text-align: center;
+}
 .content{
     display: flex;
     flex-direction: column;
@@ -24,7 +32,38 @@ button{
     margin: 1%;
     padding: 1% 10% 1% 10%;
 }
-
+.site_zone{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.site_name{
+    text-align: center;
+    margin: auto;
+    background-color: #ff8c66;
+    line-height: auto;
+    width: 90%;
+}
+.lit{
+    font-size: 2em;
+    font-weight: bolder;
+    margin: 1% 0% 1% 0%
+}
+.nav{
+    font-size: 1.2em;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    background-color: blue;
+}
+.navbar{
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+}
+.logout{
+    color: red;
+}
 .action{
     display: flex;
     justify-content: space-around;
@@ -33,24 +72,7 @@ button{
     margin: 10px 10px 25px 10px;
     
 }
-.site_zone{
-    display: flex;
-    flex-direction: column;
-}
-.site_name{
-    color: green;
-    text-align: center;
-    background-color: chocolate;
-    line-height: auto;
-    width: 90%;
-    margin: auto;
-}
-.nav{
-    font-size: 1.2em;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
+
 .listing{
     display: flex;
     flex-direction: column;

@@ -36,7 +36,7 @@ def logout_user(request):
 
 @login_required
 def create_review(request):
-    ticket_form = TicketForm(request.POST)
+    ticket_form = TicketForm(request.POST, request.FILES)
     review_form = ReviewForm(request.POST)
     if request.method == 'POST':
         if request.user.is_authenticated:
@@ -46,16 +46,16 @@ def create_review(request):
                 ticket_form.save(commit=False)
                 ticket_form.user = request.user
                 ticket_form.save()
-                """if review_form.is_valid():
+                if review_form.is_valid():
                     review_form.save(commit=False)
                     review_form.user = request.user
                     review_form.save()
                     messages.success(request, f"Critique validée pour l'oeuvre suivante: {ticket_form.title}") #pourquoi sur homepage? Oo
-                    time.sleep(2)"""
+                    time.sleep(2)
                 return redirect('../')
     context = {
-        'ticket': ticket_form,
-        'review': review_form
+        'ticket_form': ticket_form,
+        'review_form': review_form
     }
     return render(request, 'flux/create_review.html', context)
 
