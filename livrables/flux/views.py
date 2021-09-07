@@ -69,6 +69,8 @@ def create_ticket(request):
                 form.save(commit=False)
                 form.user = request.user
                 form.save()
+                """messages.success(request, f"Critique validée pour l'oeuvre suivante: {ticket_form.title}") #pourquoi sur homepage? Oo
+                    time.sleep(2)"""
                 return redirect('../')
     context = {'form': form}
     return render(request, 'flux/create_ticket.html', context)
@@ -81,17 +83,18 @@ def answer_ticket(request, ticket_number):
         if request.user.is_authenticated:
             form = ReviewForm(request.POST)
             if form.is_valid():
-                form.save(commit=False)
+                """form.save(commit=False)
                 form.user = request.user
-                form.save()
-                """new_review = Review.objects.create(
+                form.ticket = ticket
+                form.save()"""
+                new_review = Review.objects.create(
                     user = User.objects.get(pk=request.user.id),
                     rating = form.cleaned_data.get('rating'),
-                    headline = form.cleaned_data.get('headline'),
-                    body = form.cleaned_data.get('title'),
-                    ticket = ticket.id
+                    headline = form.cleaned_data.get('headline'),  
+                    body = form.cleaned_data.get('body'),
+                    ticket = ticket
                 )
-                new_review.save()"""
+                new_review.save()
                 return redirect('../')
     context = {
         'title': ticket.title,
