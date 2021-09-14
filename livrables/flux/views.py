@@ -3,10 +3,10 @@ import time
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib import messages
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.db.models import Value, F
 
 from .models import Review, Ticket, Follow
 from .forms import ReviewForm, TicketForm
@@ -14,8 +14,9 @@ from .forms import ReviewForm, TicketForm
 
 @login_required
 def flux(request):
-    tickets_list = Ticket.objects.order_by(('-time_created'))
-    paginator = Paginator(tickets_list, 4)
+    
+    ticket_list = Ticket.objects.all().annotate(review_user=F('review__user__User'), headline=F('review__headline'), body=F('review__body'), rating=F('review__rating')).order_by('-time_created')
+    paginator = Paginator(ticket_list, 4)
     page = request.GET.get('page')
     try:
         tickets = paginator.page(page)
@@ -28,6 +29,7 @@ def flux(request):
         'paginate':True
     }
     return render(request, 'flux/flux.html', context)
+
 
 @login_required
 def logout_user(request):
@@ -89,7 +91,7 @@ def answer_ticket(request, ticket_number):
                 form.save()"""
                 new_review = Review.objects.create(
                     user = User.objects.get(pk=request.user.id),
-                    rating = form.cleaned_data.get('rating'),
+                    rating = request.POST.get('rating'),
                     headline = form.cleaned_data.get('headline'),  
                     body = form.cleaned_data.get('body'),
                     ticket = ticket

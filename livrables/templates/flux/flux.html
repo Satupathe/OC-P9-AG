@@ -7,6 +7,8 @@
     <!-- CSS only -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'css/flux/flux.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
 </head>
 <body>
     <div>
@@ -45,7 +47,24 @@
                                 <p>Le {{ticket.time_created}}</p>
                                 <img class='picture' src="{% get_media_prefix %}{{ ticket.picture }}" alt="{{ ticket.picture }}">
                                 <p>{{ticket.description}}</p>
-                                <button><a href="{% url 'answer_ticket' ticket_number=ticket.id %}">Répondre à la critique</a></button>
+                                {% if ticket.headline is not None and ticket.body is not None %}
+                                    <h4>Critique de l'oeuvre</h4>
+                                    <p>{{ticket.headline}}</p>
+                                    <p>Par {{ticket.review_user}}</p>
+                                    <p>Note: <span class="displayRate">{{ticket.rating}}</span>/5</p>
+                                    <div class="result">
+                                        <i class="show-star rating-star-1" value="5" img class="staring" src="media/images/star.png" alt=""></i>
+                                        <i class="show-star rating-star-2" value="4" img class="staring" src="media/images/star.png" alt=""></i>
+                                        <i class="show-star rating-star-3" value="3" img class="staring" src="media/images/star.png" alt=""></i>
+                                        <i class="show-star rating-star-4" value="2" img class="staring" src="media/images/star.png" alt=""></i>
+                                        <i class="show-star rating-star-5" value="1" img class="staring" src="media/images/star.png" alt=""></i>
+                                    </div>                                    
+                                    <p>{{ticket.body}}</p>
+                                {% else %}
+                                    <button><a href="{% url 'answer_ticket' ticket_number=ticket.id %}">Répondre à la critique</a></button>
+                                    {{review.ticket}}
+                                {% endif %}
+                                
                             </div>
                         {% endfor %}
                         
@@ -74,5 +93,6 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<script src="{% static 'js/flux/rating.js' %}"></script>
 </html>
        
