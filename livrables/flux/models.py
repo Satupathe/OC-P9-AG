@@ -4,7 +4,6 @@ from django.db.models.fields.related import ForeignKey, OneToOneField
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
-
 class Ticket(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField(max_length=2048)

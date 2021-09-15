@@ -89,9 +89,11 @@ def answer_ticket(request, ticket_number):
                 form.user = request.user
                 form.ticket = ticket
                 form.save()"""
+                """if request.POST.get('ratingResult'):
+                    result = request.POST.get("ratingValue")"""
                 new_review = Review.objects.create(
                     user = User.objects.get(pk=request.user.id),
-                    rating = request.POST.get('rating'),
+                    rating = request.POST.get("ratingValue"),
                     headline = form.cleaned_data.get('headline'),  
                     body = form.cleaned_data.get('body'),
                     ticket = ticket
@@ -107,6 +109,8 @@ def answer_ticket(request, ticket_number):
         'form': form
     }
     return render(request, 'flux/answer_ticket.html', context)
+
+
 
 @login_required
 def follow(request):

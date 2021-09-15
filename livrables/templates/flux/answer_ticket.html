@@ -40,13 +40,31 @@
                         </div>
                     </div>
                     <div class='review'>
+                        <div class='title'>Critique de l'oeuvre</div>
                         <form method="POST" action="" enctype="multipart/form-data">
                             {% csrf_token %}
-                            {{form.as_p}}
+                            <fieldset>
+                                <p>Titre: </p> {{form.headline}}<br>
+                                <p>Critique: </p>{{form.body}}
+                            </fieldset>
                             <div class='stars'>
-                                <i class='lar la-star' data-value='1'></i><i class='lar la-star' data-value='2'></i><i class='lar la-star' data-value='3'></i><i class='lar la-star' data-value='4'></i><i class='lar la-star' data-value='5'></i>
+                                <p>Note de l'oeuvre:</p>
+                                <div>
+                                    <input type="radio" id="ratingValue0" name="ratingValue" value="0" checked>
+                                    <label class = ratingLabel for="ratingValue0">0 - Mauvais</label>
+                                    <input type="radio" id="ratingValue1" name="ratingValue" value="1">
+                                    <label class = ratingLabel for="ratingValue1">1 - Sans intérêt</label>
+                                    <input type="radio" id="ratingValue2" name="ratingValue" value="2">
+                                    <label class = ratingLabel for="ratingValue2">2 - Passable</label>
+                                    <input type="radio" id="ratingValue3" name="ratingValue" value="3">
+                                    <label class = ratingLabel for="ratingValue3">3 - Divertissant</label>
+                                    <input type="radio" id="ratingValue4" name="ratingValue" value="4">
+                                    <label class = ratingLabel for="ratingValue4">4 - Excellent</label>
+                                    <input type="radio" id="ratingValue5" name="ratingValue" value="5">
+                                    <label class = ratingLabel for="ratingValue5">5 - A lire absolument!</label>
+                                    <input type="hidden" name="ratingResult" value="0">
+                                </div>
                             </div>
-                            <input type="submit" name='rating' id="rating" value='0'>
                             <div class="form-group">
                                 <button class="btn btn-outline-info" type="submit">Envoyer</button>
                             </div>
@@ -61,6 +79,6 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-<script src="{% static 'js/flux/rating.js' %}"></script>
+<script src="{% static 'js/flux/answer.js' %}"></script>
 </html>
        
