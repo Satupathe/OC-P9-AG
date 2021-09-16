@@ -26,6 +26,7 @@
             </div>
             <div class='content'>
                 <div class='action'>
+                    <p>Utilisateur connecté actuellement: {{user}}</p>
                     <div class='ask'>
                         <button><a href="{% url 'ticket' %}">Demander une critique</a></button>
                     </div>
@@ -50,7 +51,7 @@
                                 {% if ticket.headline is not None and ticket.body is not None %}
                                     <h4>Critique de l'oeuvre</h4>
                                     <p>{{ticket.headline}}</p>
-                                    <p>Par {{ticket.review_user}}</p>
+                                    
                                     <p>Note: <span class="displayRate">{{ticket.rating}}</span>/5</p>
                                     <div class="result">
                                         <i class="show-star rating-star-1" value="1" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
@@ -58,7 +59,9 @@
                                         <i class="show-star rating-star-3" value="3" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
                                         <i class="show-star rating-star-4" value="4" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
                                         <i class="show-star rating-star-5" value="5" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
-                                    </div>                                    
+                                    </div>
+                                    <p>Par {{ticket.review_user}}</p>
+                                    <p>Le {{ticket.time}}</p>                                 
                                     <p>{{ticket.body}}</p>
                                 {% else %}
                                     <button><a href="{% url 'answer_ticket' ticket_number=ticket.id %}">Répondre à la critique</a></button>

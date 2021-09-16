@@ -87,7 +87,7 @@ li{
 .ticket{
     width: 600px;
     text-align: center;
-    margin-bottom: 20px;
+    margin: 20px;
     padding: 10px;
     border: 2px solid black;
 }

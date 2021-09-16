@@ -15,7 +15,12 @@ from .forms import ReviewForm, TicketForm
 @login_required
 def flux(request):
     
-    ticket_list = Ticket.objects.all().annotate(review_user=F('review__user__User'), headline=F('review__headline'), body=F('review__body'), rating=F('review__rating')).order_by('-time_created')
+    ticket_list = Ticket.objects.all().annotate(review_user=F('review__user__username'),
+                                                headline=F('review__headline'),
+                                                body=F('review__body'),
+                                                rating=F('review__rating'),
+                                                time=F('review__time_created')
+                                                ).order_by('-time_created')
     paginator = Paginator(ticket_list, 4)
     page = request.GET.get('page')
     try:
@@ -26,7 +31,8 @@ def flux(request):
         tickets = paginator.page(paginator.num_pages)
     context = {
         'tickets':tickets,
-        'paginate':True
+        'paginate':True,
+        'user': request.user,
     }
     return render(request, 'flux/flux.html', context)
 
@@ -63,14 +69,19 @@ def create_review(request):
 
 @login_required
 def create_ticket(request):
+    print(request.user)
     form = TicketForm(request.POST, request.FILES)
     if request.method == 'POST':
         if request.user.is_authenticated:
             form = TicketForm(request.POST, request.FILES)
             if form.is_valid():
-                form.save(commit=False)
-                form.user = request.user
-                form.save()
+                new_ticket = Ticket.objects.create(
+                    user = User.objects.get(pk=request.user.id),
+                    title = form.cleaned_data.get('title'),
+                    description = form.cleaned_data.get('description'),
+                    picture = form.cleaned_data.get('picture'),
+                )
+                new_ticket.save()
                 """messages.success(request, f"Critique validée pour l'oeuvre suivante: {ticket_form.title}") #pourquoi sur homepage? Oo
                     time.sleep(2)"""
                 return redirect('../')
@@ -106,7 +117,8 @@ def answer_ticket(request, ticket_number):
         'picture': ticket.picture,
         'user': ticket.user,
         'time': ticket.time_created,
-        'form': form
+        'form': form,
+        'reviewuser': request.user,
     }
     return render(request, 'flux/answer_ticket.html', context)
 
