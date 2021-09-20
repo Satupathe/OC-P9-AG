@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
@@ -10,7 +10,7 @@ urlpatterns = [
     path('create_review/', views.create_review, name='create_review'),
     path('ticket/', views.create_ticket, name='ticket'),
     path('answer_ticket/<str:ticket_number>', views.answer_ticket, name='answer_ticket'),
-    path('follow/', views.follow, name='follow'),
+    path('follow/', include('follow.urls')),
 ]
 
 if settings.DEBUG:

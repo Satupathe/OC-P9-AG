@@ -25,20 +25,17 @@ h3{
     border: 2px solid black;
     border-radius: 5px;
     margin: 1%;
-    background-color: indianred
 }
 
 .title{
     text-align: center;
     font-size: 2.5em;
     line-height: 0px;
-    background-color: green;
 }
 
 .sign_in{
     display: flex;
     flex-direction: column;
-    background-color: gold;
     width: 50%;
 }
 
@@ -82,4 +79,7 @@ button{
     background-color: saddlebrown;
     justify-content: center;
     align-items: center;
+}
+.sign-up-form{
+    padding-right: 2%;
 }

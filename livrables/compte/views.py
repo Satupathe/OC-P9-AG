@@ -30,7 +30,7 @@ def sign_in(request):
             return redirect('home')
     else:
         form = UserRegisterForm()
-    return render(request, 'compte/sign_in.html', {'form': form})
+    return render(request, 'compte/sign_up.html', {'form': form})
 
 def redirect_home(request):
   return HttpResponseRedirect('/compte/')

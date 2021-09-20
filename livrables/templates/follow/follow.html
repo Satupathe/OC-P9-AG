@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Follow Page</title>
+</head>
+<body>
+    <h1>Page d'abonnement</h1>
+    <hr>
+    <h4>Name: {{user_obj.username}}</h4>
+    <span>Followers: {{check_user_followed.count}}</span>
+    <br>
+    <span>Following: {{following_field.following.count}}</span>
+    <br><br>
+
+    <p>bonjour je suis un suiveur</p>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form.name}}
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Envoyer</button>
+        </div>
+    </form>
+    
+
+    <h2>Users followed</h2>
+    userobj(l'utilisateur actuel): {{user_obj}} <br>
+    session following(la présence de l'objet dans la base de donnée): {{session_following}} <br>
+    following_field(le field présent dans l'objet de la db): {{following_field}} <br>
+    
+    check_user_followers(vérifier la présence de followers): {{check_user_followed}} <br>
+    check_user_followers(vérifier la présence de followers): {{check_follower}} <br>
+    following_field(récupérer le modèle Follow de l'utilisateur actuel): {{following_field.following}} <br>
+
+</body>
+</html>
+

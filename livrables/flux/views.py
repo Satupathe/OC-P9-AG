@@ -8,7 +8,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.db.models import Value, F
 
-from .models import Review, Ticket, Follow
+from .models import Review, Ticket
 from .forms import ReviewForm, TicketForm
 
 
@@ -96,12 +96,6 @@ def answer_ticket(request, ticket_number):
         if request.user.is_authenticated:
             form = ReviewForm(request.POST)
             if form.is_valid():
-                """form.save(commit=False)
-                form.user = request.user
-                form.ticket = ticket
-                form.save()"""
-                """if request.POST.get('ratingResult'):
-                    result = request.POST.get("ratingValue")"""
                 new_review = Review.objects.create(
                     user = User.objects.get(pk=request.user.id),
                     rating = request.POST.get("ratingValue"),
@@ -123,14 +117,3 @@ def answer_ticket(request, ticket_number):
     return render(request, 'flux/answer_ticket.html', context)
 
 
-
-@login_required
-def follow(request):
-    following = Follow.objects.filter(user=id).values('following')
-    followers = Follow.objects.filter(user=User.id).values('followers')
-    context = {
-        'following':following,
-        'followers':followers
-    }
-    return render(request, 'flux/follow.html', context)
-    

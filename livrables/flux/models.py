@@ -18,7 +18,3 @@ class Review(models.Model):
     body = models.TextField(max_length=8192)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     time_created = models.DateTimeField(auto_now_add=True)
-
-class Follow(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User', default=1)
-    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following', default=1)

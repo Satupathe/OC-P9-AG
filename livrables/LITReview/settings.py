@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'user',
     'flux',
     'star_ratings',
+    'follow',
 ]
 
 MIDDLEWARE = [
