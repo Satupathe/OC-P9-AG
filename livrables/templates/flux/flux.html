@@ -36,6 +36,11 @@
                 </div>
                 <div class= 'listing'>
                     <h3 class='flux'>Nouvelles demandes et critiques disponibles</h3>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p id="messages">{{message}}</p>
+                        {% endfor %}
+                    {% endif %}
                     {% if tickets|length_is:"0" %}
                     <div class="text-center">
                     Il n'existe pour l'instant aucun ticket

@@ -71,7 +71,6 @@ li{
     border: 2px solid black;
     border-radius: 5px;
     margin: 10px 10px 25px 10px;
-    
 }
 
 .listing{
@@ -143,5 +142,26 @@ li{
 .rating-star-1 {
     background-color: None;
 }
+.follow{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin: 10px 10px 25px 10px;
+    padding-left: 20px;
+}
+.add_follow{
+    display: flex;
+    max-height: 50px;
+    align-items: stretch;
 
+}
+.followed_user{
+    height:50px;
+    text-align: center;
+    vertical-align: center;
+    line-height: 50px;
+
+}
 

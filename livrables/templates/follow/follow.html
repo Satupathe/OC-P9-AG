@@ -1,36 +1,79 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Follow Page</title>
+    <meta charset="UTF-8">
+    <title>LITReview</title>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/flux/flux.css' %}">
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
 </head>
 <body>
-    <h1>Page d'abonnement</h1>
-    <hr>
-    <h4>Name: {{user_obj.username}}</h4>
-    <span>Followers: {{check_user_followed.count}}</span>
-    <br>
-    <span>Following: {{following_field.following.count}}</span>
-    <br><br>
-
-    <p>bonjour je suis un suiveur</p>
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{form.name}}
-        <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">Envoyer</button>
+    <div>
+        <h3>Abonnements</h3>
+        <div>
+            <div class='content'>
+                <div class='site_zone'>
+                    <div class='site_name'>
+                        <p>LITReview</p>
+                    </div>
+                    <div class='nav'>
+                        {% include 'LITReview/navbar.html' %}
+                    </div>
+                </div>
+            </div>
+            <div class='content'>
+                <div class='follow'>
+                    <h5>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <p id="messages">{{message}}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </h5>
+                    <h3>Utilisateur actuel: {{user_obj.username}}</h3>
+                    <h3>Followed_users: {{followed_users.count}}</h3>
+                    <h5>Suivre un nouvel utilisateur: </h5>
+                    <form action="" method="POST">
+                        <div class="add_follow"> 
+                            {% csrf_token %}
+                            {{form.name}}
+                            <div class="form-group">
+                                <button class="btn btn-outline-info" name="follow" type="submit">Envoyer</button>
+                            </div>
+                        </div>
+                    </form>
+                    {% if followed_users.count != 0 %}
+                        {% for element in followed_users %}
+                            {% if element.followed_user is not None %}
+                                    <form action="" method="POST">
+                                        <div class="add_follow"> 
+                                            {% csrf_token %}
+                                            <p class="followed_user">utilisateur: {{element.followed_user}}</p>
+                                            <div class="form-group">
+                                                <button class="btn btn-outline-info" name="unfollow" type="submit" value={{element.followed_user}}>Se désabonner</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <br>
+                    <h3>Followers: {{check_followers.count}}</h3>
+                    {% if check_followers.count != 0 %}
+                        {% for element in check_followers %}
+                            {% if element.user is not None %}
+                                <div class="add_follow"> 
+                                    <p class="followed_user">utilisateur: {{element.user}}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
         </div>
-    </form>
-    
-
-    <h2>Users followed</h2>
-    userobj(l'utilisateur actuel): {{user_obj}} <br>
-    session following(la présence de l'objet dans la base de donnée): {{session_following}} <br>
-    following_field(le field présent dans l'objet de la db): {{following_field}} <br>
-    
-    check_user_followers(vérifier la présence de followers): {{check_user_followed}} <br>
-    check_user_followers(vérifier la présence de followers): {{check_follower}} <br>
-    following_field(récupérer le modèle Follow de l'utilisateur actuel): {{following_field.following}} <br>
-
+    </div>
 </body>
 </html>
 

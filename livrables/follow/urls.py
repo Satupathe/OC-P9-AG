@@ -5,7 +5,7 @@ from . import views
 
 
 urlpatterns = [
-    path("", views.profile, name='follow'),
+    path("", views.follow, name='follow'),
 ]
 
 if settings.DEBUG:

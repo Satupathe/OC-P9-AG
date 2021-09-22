@@ -14,7 +14,6 @@ from .forms import ReviewForm, TicketForm
 
 @login_required
 def flux(request):
-    
     ticket_list = Ticket.objects.all().annotate(review_user=F('review__user__username'),
                                                 headline=F('review__headline'),
                                                 body=F('review__body'),
@@ -69,7 +68,6 @@ def create_review(request):
 
 @login_required
 def create_ticket(request):
-    print(request.user)
     form = TicketForm(request.POST, request.FILES)
     if request.method == 'POST':
         if request.user.is_authenticated:
@@ -82,8 +80,8 @@ def create_ticket(request):
                     picture = form.cleaned_data.get('picture'),
                 )
                 new_ticket.save()
-                """messages.success(request, f"Critique validée pour l'oeuvre suivante: {ticket_form.title}") #pourquoi sur homepage? Oo
-                    time.sleep(2)"""
+                messages.success(request, f"Critique validée pour l'oeuvre suivante: {new_ticket.title}") #pourquoi sur homepage? Oo
+                time.sleep(2)
                 return redirect('../')
     context = {'form': form}
     return render(request, 'flux/create_ticket.html', context)
