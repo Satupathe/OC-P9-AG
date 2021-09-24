@@ -5,8 +5,9 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.db.models import F
 from django.contrib.auth.models import User
-from django.db.models import Value, F
+
 
 from .models import Review, Ticket
 from .forms import ReviewForm, TicketForm
@@ -20,7 +21,7 @@ def flux(request):
                                                 rating=F('review__rating'),
                                                 time=F('review__time_created')
                                                 ).order_by('-time_created')
-    paginator = Paginator(ticket_list, 4)
+    paginator = Paginator(ticket_list, 5)
     page = request.GET.get('page')
     try:
         tickets = paginator.page(page)
@@ -50,15 +51,24 @@ def create_review(request):
             ticket_form = TicketForm(request.POST, request.FILES)
             review_form = ReviewForm(request.POST)
             if ticket_form.is_valid():
-                ticket_form.save(commit=False)
-                ticket_form.user = request.user
-                ticket_form.save()
-                if review_form.is_valid():
-                    review_form.save(commit=False)
-                    review_form.user = request.user
-                    review_form.save()
-                    messages.success(request, f"Critique validée pour l'oeuvre suivante: {ticket_form.title}") #pourquoi sur homepage? Oo
-                    time.sleep(2)
+                new_ticket = Ticket.objects.create(
+                    user = User.objects.get(pk=request.user.id),
+                    title = ticket_form.cleaned_data.get('title'),
+                    description = ticket_form.cleaned_data.get('description'),
+                    picture = ticket_form.cleaned_data.get('picture'),
+                )
+                new_ticket.save()
+            if review_form.is_valid():
+                linked_ticket = Ticket.objects.filter(user__exact = request.user).order_by('-time_created')[0]
+                new_review = Review.objects.create(
+                    user = User.objects.get(pk=request.user.id),
+                    rating = request.POST.get("ratingValue"),
+                    headline = review_form.cleaned_data.get('headline'),  
+                    body = review_form.cleaned_data.get('body'),
+                    ticket = linked_ticket
+                )
+                new_review.save()
+                messages.success(request, f"Critique validée pour l'oeuvre suivante: {new_ticket.title}")
                 return redirect('../')
     context = {
         'ticket_form': ticket_form,
@@ -80,7 +90,7 @@ def create_ticket(request):
                     picture = form.cleaned_data.get('picture'),
                 )
                 new_ticket.save()
-                messages.success(request, f"Critique validée pour l'oeuvre suivante: {new_ticket.title}") #pourquoi sur homepage? Oo
+                messages.success(request, f"Critique demandée pour l'oeuvre suivante: {new_ticket.title}") #pourquoi sur homepage? Oo
                 time.sleep(2)
                 return redirect('../')
     context = {'form': form}

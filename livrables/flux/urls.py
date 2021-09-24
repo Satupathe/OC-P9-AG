@@ -11,6 +11,7 @@ urlpatterns = [
     path('ticket/', views.create_ticket, name='ticket'),
     path('answer_ticket/<str:ticket_number>', views.answer_ticket, name='answer_ticket'),
     path('follow/', include('follow.urls')),
+    path('posts/', include('posts.urls')),
 ]
 
 if settings.DEBUG:

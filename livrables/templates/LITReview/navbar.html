@@ -1,8 +1,8 @@
 {% load static %}
 {% block content %}
   <ul class='navbar'>
-    <li><a href="#">Flux</a></li>
-    <li><a href="#">Post</a></li>
+    <li><a href="{% url 'flux' %}">Flux</a></li>
+    <li><a href="{% url 'posts' %}">Posts</a></li>
     <li><a href="{% url 'follow' %}">Abonnements</a></li>
     <li><a class='logout' href="{% url 'logout_user' %}">Se déconnecter</a></li>
   </ul>

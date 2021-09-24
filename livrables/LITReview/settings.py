@@ -39,10 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'compte',
-    'user',
     'flux',
     'star_ratings',
     'follow',
+    'posts',
 ]
 
 MIDDLEWARE = [
