@@ -26,8 +26,8 @@
             </div>
             <div class='content'>
                 <div class= 'listing'>
-                    <div class="ticket">
-                        {% for element in ordered_total_posts %}
+                    {% for element in ordered_total_posts %}
+                        <div class="ticket">
                             <h3>{{element.title}}</h3> <p>Par {{element.user}} Le {{element.time_created}}</p>
                             <img class='picture' src="{% get_media_prefix %}{{ element.picture }}" alt="{{ element.picture }}"><br>
                             description: {{element.description}}<br>
@@ -54,25 +54,25 @@
                                 <div class="post_modification"> 
                                     {% csrf_token %}
                                     <div class="form-group">
-                                        <button class="btn btn-outline-info" name="modify" type="submit" value={{element.id}}>Modifier</button>
+                                        <button class="btn btn-outline-info" ><a href="{% url 'modify' ticket_number=element.id %}">Modifier</a></button>
                                         <button class="btn btn-outline-info" name="suppress" type="submit" value={{element.id}}>Supprimer</button>
                                     </div>
                                     <br>
                                 </div>
                             </form>
-                        {% endfor %}
-                        {% if paginate %}
-                            <div class="clearfix"></div>
-                            <nav aria-label="">   
-                            {% if tickets.has_previous %}
-                                <a href="?page={{ tickets.previous_page_number }}">Précédent</a>
-                            {% endif %}
-                            {% if tickets.has_next %}
-                                <a href="?page={{ tickets.next_page_number }}">Suivant</a>
-                            {% endif %}
-                            </nav>
+                        </div>
+                    {% endfor %}
+                    {% if paginate %}
+                        <div class="clearfix"></div>
+                        <nav aria-label="">   
+                        {% if tickets.has_previous %}
+                            <a href="?page={{ tickets.previous_page_number }}">Précédent</a>
                         {% endif %}
-                    </div>
+                        {% if tickets.has_next %}
+                            <a href="?page={{ tickets.next_page_number }}">Suivant</a>
+                        {% endif %}
+                        </nav>
+                    {% endif %}
                 </div>
             </div>
         </div>

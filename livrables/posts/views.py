@@ -1,6 +1,7 @@
 from itertools import chain
 from operator import attrgetter
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -87,26 +88,69 @@ def posts(request):
     }
     return render(request, 'posts/posts.html', context)
 
+@login_required
 def modify(request, ticket_number):
     user_obj = User.objects.get(username=request.user)
     ticket = Ticket.objects.get(id=ticket_number)
-    associated_review = Review.objects.get(ticket__id=ticket_number)
-    form = TicketForm(request.POST, request.FILES)
-    form = ReviewForm(request.POST)
-    
-    if ticket.user == user_obj and associated_review.user == user_obj:
-        pass
-        #afficher les deux formulaire
-    elif ticket.user == user_obj and associated_review.user != user_obj:
-        pass
-        #afficher le formulaire du ticket
-    elif ticket.user != user_obj and associated_review.user == user_obj:
-        pass
-    # à mettre dans le template? ou laisser dans la vue?
-    context = {
+    ticket_form = TicketForm(instance=ticket)
+    review_form = ReviewForm(instance=ticket)
+    result = []
+    actual_form = []
+    associated_review = None
 
+    try:
+        associated_review = Review.objects.get(ticket__id=ticket_number)
+        if ticket.user == user_obj and associated_review.user == user_obj:
+            if request.method =='POST':
+                if ticket_form.is_valid():
+                    ticket.update(title=ticket_form.cleaned_data.get('title'),
+                                  description=ticket_form.cleaned_data.get('description'),
+                                  picture=ticket_form.cleaned_data.get('picture')
+                                  )
+                if review_form.is_valid():
+                    associated_review.update(headline=ticket_form.cleaned_data.get('headline'),
+                                             body=ticket_form.cleaned_data.get('body'),
+                                             rating=ticket_form.cleaned_data.get('rating')
+                                             )
+                return redirect("posts")
+
+
+        elif ticket.user == user_obj and associated_review.user != user_obj:
+            if request.method =='POST':
+                ticket_form = TicketForm(request.POST, instance=ticket)
+                if ticket_form.is_valid():
+                    ticket = ticket_form.save(commit=False)
+                    ticket.title = ticket_form.cleaned_data.get('title')
+                    ticket.description = ticket_form.cleaned_data.get('description')
+                    ticket.picture = ticket_form.cleaned_data.get('picture')
+                    ticket_form.save()
+                return redirect("posts")
+
+        elif ticket.user != user_obj and associated_review.user == user_obj:
+            if request.method =='POST':
+                review_form = ReviewForm(request.POST, instance = ticket)
+                if review_form.is_valid():
+                    review_form.save(commit=False)
+                    return redirect("posts")
+
+    except ObjectDoesNotExist:
+        if request.method =='POST':
+            if ticket_form.is_valid():
+                ticket = ticket_form.save(commit=False)
+                ticket.title = ticket_form.cleaned_data.get('title')
+                ticket.description = ticket_form.cleaned_data.get('description')
+                ticket.picture = ticket_form.cleaned_data.get('picture')
+                ticket.save()
+            return redirect("posts")
+
+    context = {
+        'user_obj': user_obj,
+        'ticket_form': ticket_form,
+        'review_form': review_form,
+        'associated_review': associated_review,
+        'ticket': ticket,
     }
-    return render(request, 'modify.html', context)
+    return render(request, 'posts/modify.html', context)
     # prévoir un autre vue pour la modification du post ok
     # récupérer les informations de l'utilisateur connecté ok
     # récupérer les informations du post à modifier grâce à la pk envoyée par le template

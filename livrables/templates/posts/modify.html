@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LITReview</title>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/flux/flux.css' %}">
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+</head>
+<body>
+    <div>
+        <h3>Mes posts</h3>
+        <div>
+            <div class='content'>
+                <div class='site_zone'>
+                    <div class='site_name'>
+                        <p>LITReview</p>
+                    </div>
+                    <div class='nav'>
+                        {% include 'LITReview/navbar.html' %}
+                    </div>
+                </div>
+            </div>
+            <div class='content'>
+                <div class="ticket">
+                    <h3>{{element.title}}</h3> <p>Par {{element.user}} Le {{element.time_created}}</p>
+                    <img class='picture' src="{% get_media_prefix %}{{ element.picture }}" alt="{{ element.picture }}"><br>
+                    description: {{element.description}}<br>
+                    {% if element.headline is not None and element.time is not None %}
+                        <br><h6>Review associée:</h6>
+                        {% if element.review_user != element.user.username %}
+                            Réalisée par {{element.review_user}}
+                        {% endif %} 
+                        Le {{element.time}} <br>
+                        headline: {{element.headline}}<br> 
+                        critique: {{element.body}}<br>
+                        {% if element.rating is not None %}
+                            <p>Note: <span class="displayRate">{{element.rating}}</span>/5</p>
+                            <div class="result">
+                                <i class="show-star rating-star-1" value="1" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
+                                <i class="show-star rating-star-2" value="2" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
+                                <i class="show-star rating-star-3" value="3" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
+                                <i class="show-star rating-star-4" value="4" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
+                                <i class="show-star rating-star-5" value="5" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
+                            </div> 
+                        {% endif %}
+                    {% endif %}
+                    <form action="" method="POST">
+                        <div class="post_modification"> 
+                            {% csrf_token %}
+                            {% if ticket.user == user_obj and associated_review.user == user_obj %}
+                                {{ticket_form.title}}
+                                {{ticket_form.description}}
+                                <img class='picture' src="{% get_media_prefix %}{{ ticket.picture }}" alt="{{ ticket.picture }}">
+                                {{ticket_form.picture}}
+                                <br><br>
+                                {{review_form.headline}}
+                                {{review_form.body}}
+                                {{review_form.rating}}
+                                 <br><br>
+
+                            {% elif ticket.user == user_obj and associated_review.user != user_obj%}
+                                {{ticket_form.title}}
+                                {{ticket_form.description}}
+                                <img class='picture' src="{% get_media_prefix %}{{ ticket.picture }}" alt="{{ ticket.picture }}">
+                                {{ticket_form.picture}}
+                                <br><br>
+                            {% elif ticket.user != user_obj and associated_review.user == user_obj%}
+                                {{review_form.headline}}
+                                {{review_form.body}}
+                                {{review_form.rating}}
+                                 <br><br>
+                            {% endif %}
+                            <div class="form-group">
+                                <button class="btn btn-outline-info" type="submit">Valider</button>
+                            </div>
+                            <br>
+                        </div>
+                    </form>
