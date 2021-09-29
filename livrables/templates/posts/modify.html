@@ -26,52 +26,82 @@
             </div>
             <div class='content'>
                 <div class="ticket">
-                    <h3>{{element.title}}</h3> <p>Par {{element.user}} Le {{element.time_created}}</p>
-                    <img class='picture' src="{% get_media_prefix %}{{ element.picture }}" alt="{{ element.picture }}"><br>
-                    description: {{element.description}}<br>
-                    {% if element.headline is not None and element.time is not None %}
+                    {{ticket}}
+                    <h3>{{ticket.title}}</h3> <p>Par {{ticket.user}} Le {{ticket.time_created}}</p>
+                    {% if ticket.picture and ticket.picture != "" %}
+                    <img class='picture' src="{% get_media_prefix %}{{ ticket.picture }}" alt="{{ ticket.picture }}"><br>
+                    {% endif %}
+                    description: {{ticket.description}}<br><br>
+                    {% if ticket.headline is not None and ticket.time is not None %}
                         <br><h6>Review associée:</h6>
-                        {% if element.review_user != element.user.username %}
-                            Réalisée par {{element.review_user}}
+                        {% if ticket.review_user != ticket.user.username %}
+                            Réalisée par {{ticket.review_user}}
                         {% endif %} 
-                        Le {{element.time}} <br>
-                        headline: {{element.headline}}<br> 
-                        critique: {{element.body}}<br>
-                        {% if element.rating is not None %}
-                            <p>Note: <span class="displayRate">{{element.rating}}</span>/5</p>
+                        Le {{ticket.time}} <br>
+                        headline: {{ticket.headline}}<br> 
+                        critique: {{ticket.body}}<br>
+                        {% if ticket.rating is not None %}
+                            <p>Note: <span class="displayRate">{{ticket.rating}}</span>/5</p>
                             <div class="result">
-                                <i class="show-star rating-star-1" value="1" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
-                                <i class="show-star rating-star-2" value="2" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
-                                <i class="show-star rating-star-3" value="3" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
-                                <i class="show-star rating-star-4" value="4" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
-                                <i class="show-star rating-star-5" value="5" data-target="rate"><img class="starimg" src="media/images/star.png" alt=""></i>
+                                <i class="show-star rating-star-1" value="1" data-target="rate"><img class="starimg" src="{% get_media_prefix %}images/star.png" alt=""></i>
+                                <i class="show-star rating-star-2" value="2" data-target="rate"><img class="starimg" src="{% get_media_prefix %}images/star.png" alt=""></i>
+                                <i class="show-star rating-star-3" value="3" data-target="rate"><img class="starimg" src="{% get_media_prefix %}images/star.png" alt=""></i>
+                                <i class="show-star rating-star-4" value="4" data-target="rate"><img class="starimg" src="{% get_media_prefix %}images/star.png" alt=""></i>
+                                <i class="show-star rating-star-5" value="5" data-target="rate"><img class="starimg" src="{% get_media_prefix %}images/star.png" alt=""></i>
                             </div> 
                         {% endif %}
                     {% endif %}
-                    <form action="" method="POST">
+                    <form action="" method="POST" enctype="multipart/form-data">
                         <div class="post_modification"> 
                             {% csrf_token %}
                             {% if ticket.user == user_obj and associated_review.user == user_obj %}
-                                {{ticket_form.title}}
-                                {{ticket_form.description}}
-                                <img class='picture' src="{% get_media_prefix %}{{ ticket.picture }}" alt="{{ ticket.picture }}">
-                                {{ticket_form.picture}}
+                                {{ticket_form.as_p}}
                                 <br><br>
-                                {{review_form.headline}}
-                                {{review_form.body}}
-                                {{review_form.rating}}
-                                 <br><br>
+                                {{review_form.as_p}}
+                                <div class='stars'>
+                                    <p>Note de l'oeuvre:</p>
+                                    <div>
+                                        <input type="radio" id="ratingValue0" name="ratingValue" value="0" checked>
+                                        <label class = ratingLabel for="ratingValue0">0 - Mauvais</label>
+                                        <input type="radio" id="ratingValue1" name="ratingValue" value="1">
+                                        <label class = ratingLabel for="ratingValue1">1 - Sans intérêt</label>
+                                        <input type="radio" id="ratingValue2" name="ratingValue" value="2">
+                                        <label class = ratingLabel for="ratingValue2">2 - Passable</label>
+                                        <input type="radio" id="ratingValue3" name="ratingValue" value="3">
+                                        <label class = ratingLabel for="ratingValue3">3 - Divertissant</label>
+                                        <input type="radio" id="ratingValue4" name="ratingValue" value="4">
+                                        <label class = ratingLabel for="ratingValue4">4 - Excellent</label>
+                                        <input type="radio" id="ratingValue5" name="ratingValue" value="5">
+                                        <label class = ratingLabel for="ratingValue5">5 - A lire absolument!</label>
+                                        <input type="hidden" name="ratingResult" value="0">
+                                    </div>
+                                </div>
+                                 <br>
 
                             {% elif ticket.user == user_obj and associated_review.user != user_obj%}
-                                {{ticket_form.title}}
-                                {{ticket_form.description}}
-                                <img class='picture' src="{% get_media_prefix %}{{ ticket.picture }}" alt="{{ ticket.picture }}">
-                                {{ticket_form.picture}}
+                                {{ticket_form.as_p}}
+                                
                                 <br><br>
                             {% elif ticket.user != user_obj and associated_review.user == user_obj%}
-                                {{review_form.headline}}
-                                {{review_form.body}}
-                                {{review_form.rating}}
+                                {{review_form.as_p}}
+                                <div class='stars'>
+                                    <p>Note de l'oeuvre:</p>
+                                    <div>
+                                        <input type="radio" id="ratingValue0" name="ratingValue" value="0" checked>
+                                        <label class = ratingLabel for="ratingValue0">0 - Mauvais</label>
+                                        <input type="radio" id="ratingValue1" name="ratingValue" value="1">
+                                        <label class = ratingLabel for="ratingValue1">1 - Sans intérêt</label>
+                                        <input type="radio" id="ratingValue2" name="ratingValue" value="2">
+                                        <label class = ratingLabel for="ratingValue2">2 - Passable</label>
+                                        <input type="radio" id="ratingValue3" name="ratingValue" value="3">
+                                        <label class = ratingLabel for="ratingValue3">3 - Divertissant</label>
+                                        <input type="radio" id="ratingValue4" name="ratingValue" value="4">
+                                        <label class = ratingLabel for="ratingValue4">4 - Excellent</label>
+                                        <input type="radio" id="ratingValue5" name="ratingValue" value="5">
+                                        <label class = ratingLabel for="ratingValue5">5 - A lire absolument!</label>
+                                        <input type="hidden" name="ratingResult" value="0">
+                                    </div>
+                                </div>
                                  <br><br>
                             {% endif %}
                             <div class="form-group">
@@ -80,3 +110,10 @@
                             <br>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="{% static 'js/flux/rating.js' %}"></script>
+</html>
