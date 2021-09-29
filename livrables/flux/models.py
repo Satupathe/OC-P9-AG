@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.fields.related import ForeignKey, OneToOneField
-from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Ticket(models.Model):
@@ -13,7 +11,7 @@ class Ticket(models.Model):
 
     def __str__(self):
         return self.title
-        
+
 
 class Review(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)

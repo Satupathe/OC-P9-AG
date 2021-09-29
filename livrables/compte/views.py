@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 
 
 def home_page(request):
-    if request.method =='POST':
+    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         nxt = request.GET.get("next", None)
@@ -15,10 +15,12 @@ def home_page(request):
             login(request, user)
             if nxt is not None:
                 return redirect(nxt)
-            return redirect('flux')   
-        else: messages.info(request, "Utilisateur et/ou mot de passe incorrect")
+            return redirect('flux')
+        else:
+            messages.info(request, "Utilisateur et/ou mot de passe incorrect")
     context = {}
     return render(request, 'compte/home_page.html', context)
+
 
 def sign_in(request):
     if request.method == 'POST':
@@ -32,8 +34,9 @@ def sign_in(request):
         form = UserRegisterForm()
     return render(request, 'compte/sign_up.html', {'form': form})
 
+
 def redirect_home(request):
-  return HttpResponseRedirect('/compte/')
+    return HttpResponseRedirect('/compte/')
 
 
 def logout_user(request):

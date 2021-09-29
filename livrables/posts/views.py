@@ -3,7 +3,6 @@ from operator import attrgetter
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.contrib.auth.models import User
@@ -27,7 +26,7 @@ def posts(request):
                           body=F('review__body'),
                           rating=F('review__rating'),
                           time=F('review__time_created')
-                         ).order_by('-time_created')
+                          ).order_by('-time_created')
     total_posts = list(chain(tickets_and_reviews, user_reviews))
     ordered_total_posts = sorted(total_posts, key=attrgetter('time_created'), reverse=True)
     paginator = Paginator(ordered_total_posts, 5)
@@ -39,14 +38,14 @@ def posts(request):
     except EmptyPage:
         tickets = paginator.page(paginator.num_pages)
 
-    if request.method =='POST':
+    if request.method == 'POST':
         if 'suppress' in request.POST:
             supress_id = request.POST.get("suppress")
             ticket_to_supress = Ticket.objects.get(id=supress_id)
             if ticket_to_supress.user == request.user:
                 ticket_to_supress.delete()
             else:
-                review_to_suppress = Review.objects.get(ticket__id=supress_id) #get ou filter à tester
+                review_to_suppress = Review.objects.get(ticket__id=supress_id)
                 review_to_suppress.delete()
             return redirect("posts")
 
@@ -56,32 +55,31 @@ def posts(request):
         'user_reviews': user_reviews,
         'total_posts': total_posts,
         'ordered_total_posts': ordered_total_posts,
-        'tickets':tickets,
-        'paginate':True,
+        'tickets': tickets,
+        'paginate': True,
         'user': request.user,
     }
     return render(request, 'posts/posts.html', context)
+
 
 @login_required
 def modify(request, ticket_number):
     user_obj = User.objects.get(username=request.user)
     ticket = Ticket.objects.filter(id=ticket_number).annotate(review_user=F('review__user__username'),
-                                                                        headline=F('review__headline'),
-                                                                        body=F('review__body'),
-                                                                        rating=F('review__rating'),
-                                                                        time=F('review__time_created')).get()
+                                                              headline=F('review__headline'),
+                                                              body=F('review__body'),
+                                                              rating=F('review__rating'),
+                                                              time=F('review__time_created')).get()
 
     ticket_form = TicketForm(instance=ticket)
     review_form = None
-    result = []
-    actual_form = []
     associated_review = None
 
     try:
         associated_review = Review.objects.get(ticket__id=ticket_number)
         review_form = ReviewForm(instance=associated_review)
         if ticket.user == user_obj and associated_review.user == user_obj:
-            if request.method =='POST':
+            if request.method == 'POST':
                 ticket_form = TicketForm(request.POST, request.FILES)
                 review_form = ReviewForm(request.POST)
                 if ticket_form.is_valid():
@@ -95,12 +93,10 @@ def modify(request, ticket_number):
                     associated_review.body = review_form.cleaned_data.get('body')
                     associated_review.rating = request.POST.get("ratingValue")
                     associated_review.save()
-                                             
                 return redirect("posts")
 
-
         elif ticket.user == user_obj and associated_review.user != user_obj:
-            if request.method =='POST':
+            if request.method == 'POST':
                 ticket_form = TicketForm(request.POST, request.FILES)
                 ticket = Ticket.objects.get(id=ticket_number)
                 if ticket_form.is_valid():
@@ -111,10 +107,9 @@ def modify(request, ticket_number):
                     ticket.save()
                     return redirect("posts")
 
-
         elif ticket.user != user_obj and associated_review.user == user_obj:
 
-            if request.method =='POST':
+            if request.method == 'POST':
                 review_form = ReviewForm(request.POST)
                 ticket = Ticket.objects.get(id=ticket_number)
                 if review_form.is_valid():
@@ -125,7 +120,7 @@ def modify(request, ticket_number):
                     return redirect("posts")
 
     except ObjectDoesNotExist:
-        if request.method =='POST':
+        if request.method == 'POST':
             ticket_form = TicketForm(request.POST, request.FILES)
             ticket = Ticket.objects.get(id=ticket_number)
             if ticket_form.is_valid():
@@ -144,11 +139,3 @@ def modify(request, ticket_number):
         'ticket': ticket,
     }
     return render(request, 'posts/modify.html', context)
-    # prévoir un autre vue pour la modification du post ok
-    # récupérer les informations de l'utilisateur connecté ok
-    # récupérer les informations du post à modifier grâce à la pk envoyée par le template ok
-    # les afficher dans un formulaire (remettre les infos dans chaque lien et field) ok
-    # créer un bouton envoyer dans le formulaire ok
-    # sauvegarder les changements en faisant un update des infos de la db (CRUD) ok
-    # prévoir un message de validation de la modification ok
-    # retourner sur la page des posts ok

@@ -1,6 +1,4 @@
-from django import forms
-from django.db.models import fields
-from django.forms import ModelForm, widgets
+from django.forms import ModelForm
 from .models import Review, Ticket
 
 
@@ -12,6 +10,7 @@ class ReviewForm(ModelForm):
             'headline': 'Titre de la critique',
             'body': "Critique"
         }
+
 
 class TicketForm(ModelForm):
     class Meta:
