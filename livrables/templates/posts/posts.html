@@ -26,7 +26,7 @@
             </div>
             <div class='content'>
                 <div class= 'listing'>
-                    {% for element in ordered_total_posts %}
+                    {% for element in tickets %}
                         <div class="ticket">
                             <h3>{{element.title}}</h3> <p>Par {{element.user}} Le {{element.time_created}}</p>
                             {% if element.picture and element.picture != "" %}

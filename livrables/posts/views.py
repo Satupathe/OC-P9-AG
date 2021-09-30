@@ -54,7 +54,7 @@ def posts(request):
         'tickets_and_review': tickets_and_reviews,
         'user_reviews': user_reviews,
         'total_posts': total_posts,
-        'ordered_total_posts': ordered_total_posts,
+        'ordered_total_posts': ordered_total_posts, #utiliser ticket ou ordered_total_posts pour l'affichage dans le template?
         'tickets': tickets,
         'paginate': True,
         'user': request.user,
