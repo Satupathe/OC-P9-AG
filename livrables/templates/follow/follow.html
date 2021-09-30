@@ -33,14 +33,14 @@
                         {% endif %}
                     </h5>
                     <h3>Utilisateur actuel: {{user_obj.username}}</h3>
-                    <h3>Followed_users: {{followed_users.count}}</h3>
+                    <h3>Followed users: {{followed_users.count}}</h3>
                     <h5>Suivre un nouvel utilisateur: </h5>
                     <form action="" method="POST">
                         <div class="add_follow"> 
                             {% csrf_token %}
                             {{form.name}}
                             <div class="form-group">
-                                <button class="btn btn-outline-info" name="follow" type="submit">Envoyer</button>
+                                <button class="btn btn-outline-info" name="follow" type="submit">Suivre</button>
                             </div>
                         </div>
                     </form>
